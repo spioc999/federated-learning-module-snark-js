@@ -25,8 +25,8 @@ app.post('/prove', async function (req, res) {
 
         const { proof, publicSignals } = await snarkjs.groth16.fullProve(
             body.input, 
-            path.resolve(`${basePathSnarkCircuit}.wasm`),
-            path.resolve(`${basePathSnarkCircuit}_prove.zkey`)
+            fs.readFileSync(path.resolve(`${basePathSnarkCircuit}.wasm`)),
+            fs.readFileSync(path.resolve(`${basePathSnarkCircuit}_prove.zkey`))
         );
 
         res.status(200).json({

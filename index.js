@@ -1,3 +1,6 @@
+// Generation made following:
+// https://hackernoon.com/javascript-tutorial-for-zero-knowledge-proofs-using-snarkjs-and-circom
+
 const snarkjs = require("snarkjs");
 const fs = require("fs");
 const path = require("path");

@@ -10,7 +10,7 @@ var app = express();
 app.use(express.json());
 
 const port = 3000;
-const basePathSnarkCircuit = './snark/poseidon_hasher';
+const basePathSnarkCircuit = './snark/multiply_and_poseidon_hasher';
 
 app.get('/health', (_, res) => {
     res.status(200).json({status: 'ok'});

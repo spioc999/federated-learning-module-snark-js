@@ -11,6 +11,7 @@ app.use(express.json());
 
 const port = 3000;
 const basePathSnarkCircuit = './snark/multiply_and_poseidon_hasher';
+const baseWrongPathSnarkCircuit = './snark/add_and_poseidon_hasher';
 
 app.get('/health', (_, res) => {
     res.status(200).json({status: 'ok'});
@@ -39,6 +40,37 @@ app.post('/prove', async function (req, res) {
 
     }catch(e){
         console.error(`POST /prove => ${e.message}`);
+        res.status(500).json({
+            code: 500,
+            message: `Something went wrong!`,
+            details: `${e.message}`
+        })
+    }
+})
+
+app.post('/prove-wrong', async function (req, res) {
+    try {
+        const body = req.body;
+        if(!Object.keys(body).includes('input')){
+            return res.status(400).json({
+                code: 400,
+                message: 'Bad request!',
+            });
+        }
+
+        const { proof, publicSignals } = await snarkjs.groth16.fullProve(
+            body.input, 
+            fs.readFileSync(path.resolve(`${baseWrongPathSnarkCircuit}.wasm`)),
+            fs.readFileSync(path.resolve(`${baseWrongPathSnarkCircuit}_prove.zkey`))
+        );
+
+        res.status(200).json({
+            proof: proof,
+            publicSignals: publicSignals
+        })
+
+    }catch(e){
+        console.error(`POST /prove-wrong => ${e.message}`);
         res.status(500).json({
             code: 500,
             message: `Something went wrong!`,
